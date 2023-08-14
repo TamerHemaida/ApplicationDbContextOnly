@@ -18,11 +18,11 @@ namespace ApplicationDbContextOnly.Models
         [MaxLength(10), Display(Name = "نوع القسم"), Required(ErrorMessage = "نوع القسم")]
         public string Gender { get; set; }
 
-        //new comment for github only
+        //new comment 1 for github only
         [MaxLength(15), Display(Name = "المسار الأكاديمي"), Required(ErrorMessage = "المسار الأكاديمي")]
         public string EducationPath { get; set; }
 
-
+ 	//new comment 2 for github only
         [MaxLength(20), Display(Name = "المجمع"), Required(ErrorMessage = "المجمع")]
         public string Complex { get; set; }
 
