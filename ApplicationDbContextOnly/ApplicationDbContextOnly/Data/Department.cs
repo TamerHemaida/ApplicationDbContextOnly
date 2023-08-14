@@ -18,7 +18,7 @@ namespace ApplicationDbContextOnly.Models
         [MaxLength(10), Display(Name = "نوع القسم"), Required(ErrorMessage = "نوع القسم")]
         public string Gender { get; set; }
 
-
+        //new comment for github only
         [MaxLength(15), Display(Name = "المسار الأكاديمي"), Required(ErrorMessage = "المسار الأكاديمي")]
         public string EducationPath { get; set; }
 
