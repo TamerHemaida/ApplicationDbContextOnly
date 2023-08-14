@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ApplicationDbContextOnly.Models.EnglishWord>
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Word)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meaning)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DifficultyLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Word)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Meaning)
+                </td>
+                <td>
+                    <b>(@Html.DisplayFor(modelItem => item.DifficultyLevel))&nbsp;</b>
+                    <select id="@(string.Concat("ddl_Level",item.Id))" asp-for="@item.DifficultyLevel" onchange="UpdateWord(this,@item.Id)">
+                        <option value="0">-- Select --</option>
+                        <option value="1">Easy</option>
+                        <option value="2">Difficult</option>
+                    </select>
+                    <span id="spinner" style="display:none;">
+                        <img src="~/images/loading.gif" width="30" height="30" />
+                    </span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    <div class="input-group">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>

@@ -1,0 +1,103 @@
+﻿@model List<EnglishWord>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*
+    <form method="post" asp-action="AddWord" enctype="multipart/form-data">
+
+    <form data-ajax="true" data-ajax-method="POST" data-ajax-url="@Url.Action("Review")" data-ajax-update="#wordstble" data-ajax-mode="replace" data-ajax-loading="#spinner" data-ajax-failure="failed" enctype="multipart/form-data">
+*@
+
+<form data-ajax="true" data-ajax-method="POST" data-ajax-url="@Url.Action("Review")" data-ajax-update="#wordstble" data-ajax-mode="replace" data-ajax-loading="#spinner" data-ajax-failure="failed" enctype="multipart/form-data">
+    <button id="addNew" class="btn btn-primary mb-3">
+        تابع جديد
+    </button>
+    <table id="dataTable" class="table table-bordered">
+        <tr>
+            <th>رقم الكلمة</th>
+            <th>الكلمة</th>
+        </tr>
+        @if (Model != null && Model.Count > 0)
+        {
+            int j = 0;
+            foreach (var i in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(a => a[j].Id, new { @class = "form-control", @type = "number" })
+                        @Html.ValidationMessageFor(a => a[j].Id, null, new { @class = "badge badge-warning" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(a => a[j].Word, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(a => a[j].Word, null, new { @class = "badge badge-warning" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(a => a[j].Image, new { @class = "form-file-control", @type = "file" })
+                        @Html.ValidationMessageFor(a => a[j].Image, null, new { @class = "badge badge-warning" })
+                    </td>
+
+                </tr>
+                j++;
+            }
+        }
+    </table>
+    <button type="submit" class="btn btn-outline-primary">
+            Add &nbsp;
+            <span id="spinner" style="display:none;">
+                <img src="~/images/loading.gif" width="25" height="25" />
+            </span>
+        </button>
+    @*<button type="submit" class="btn btn-outline-primary">
+            Review
+        </button>*@
+    @*<button type="submit" class="btn btn-success">
+        <i class="bi bi-eye"></i>&nbsp; Review
+    </button>*@
+
+</form>
+
+<div id="wordstble"></div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script language="javascript">
+
+       
+
+        $(document).ready(function () {
+            //1. Add new row
+            $("#addNew").click(function (e) {
+                e.preventDefault();
+                var $tableBody = $("#dataTable");
+                var $trLast = $tableBody.find("tr:last");
+                var $trNew = $trLast.clone();
+
+                var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
+
+                $.each($trNew.find(':input'), function (i, val) {
+                    // Replaced Name
+                    var oldN = $(this).attr('name');
+                    var newN = oldN.replace('[' + suffix + ']', '[' + (parseInt(suffix) + 1) + ']');
+                    $(this).attr('name', newN);
+                    //Replaced value
+                    var type = $(this).attr('type');
+                    if (type.toLowerCase() == "text") {
+                        $(this).attr('value', '');
+                    }
+
+                    // If you have another Type then replace with default value
+                    $(this).removeClass("input-validation-error");
+
+                });
+                $trLast.after($trNew);
+
+                // Re-assign Validation
+                var form = $("form")
+                    .removeData("validator")
+                    .removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse(form);
+            });
+        });
+    </script>
+}

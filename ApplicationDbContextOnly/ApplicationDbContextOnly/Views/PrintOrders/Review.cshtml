@@ -1,0 +1,51 @@
+﻿@model List<EnglishWord>
+@{
+    ViewData["Title"] = "Review";
+}
+<partial name="_Words" model="@Model" />
+<div>
+    <form method="post" asp-action="SaveOrder" enctype="multipart/form-data">
+
+        <table id="dataTable" class="table table-bordered">
+            <tr>
+                <th>رقم الكلمة</th>
+                <th>الكلمة</th>
+            </tr>
+            @if (Model != null && Model.Count() > 0)
+            {
+                int j = 0;
+                foreach (var i in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.TextBoxFor(a => a[j].Id, new { @class = "form-control", @type = "number" })
+                            @Html.ValidationMessageFor(a => a[j].Id, null, new { @class = "badge badge-warning" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(a => a[j].Word, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a[j].Word, null, new { @class = "badge badge-warning" })
+                        </td>
+                        <td>
+                            @if (i.Image == null)
+                            {
+                                <b>No Image</b>
+                            }
+                            <b>@i.Image.FileName</b>
+                            @Html.TextBoxFor(a => a[j].Image, new { @class = "form-control", @type = "file" })
+                            @Html.HiddenFor(a => a[j].Image)
+                            @Html.ValidationMessageFor(a => a[j].Image, null, new { @class = "badge badge-warning" })
+                        </td>
+                    </tr>
+                    j++;
+                }
+            }
+        </table>
+        <button type="submit" class="btn btn-primary">
+            Save Order
+        </button>
+        @*<button type="submit" class="btn btn-outline-primary">
+            Edit Order
+        </button>*@
+    </form>
+</div>

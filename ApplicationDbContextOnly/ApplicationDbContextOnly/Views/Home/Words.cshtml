@@ -1,0 +1,58 @@
+﻿@model IEnumerable<ApplicationDbContextOnly.Models.EnglishWord>
+
+@{
+    ViewData["Title"] = "Words";
+}
+
+<a href="" data-ajax="true" data-ajax-url="/Home/GetTime" data-ajax-update="#panel" data-ajax-mode="replace">Click here</a>
+<div id="panel"></div>
+<hr />
+@*data-ajax-begin="OnBegin" data-ajax-failure="OnFailure" data-ajax-success="OnSuccess" data-ajax-complete="OnComplete"*@
+
+<form data-ajax="true" data-ajax-method="POST" data-ajax-url="@Url.Action("SearchWords")" data-ajax-update="#wordstble" data-ajax-mode="replace" data-ajax-loading="#spinner" data-ajax-failure="failed">
+    <span id="spinner" style="display:none;">
+        <img src="~/images/loading.gif" width="30" height="30" />
+    </span>
+    <div class="row d-flex justify-content-between mb-3">
+        <div class="col-md-12">
+            <div class="input-group">
+                @Html.TextBox("word", null, new { @class = "form-control", @Placeholder = "type search here ... " })
+                <input type="submit" value="Search" class="btn btn-dark" />
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="table-responsive">
+    <div id="wordstble">
+        <partial name="_ResultWords" model="@Model" />
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        failed = function (xhr) {
+            alert(`Status: ${xhr.status}, Status Text: ${xhr.statusText}`);
+        };
+
+        function UpdateWord(selectedLevel, wordId) {
+            var text = selectedLevel.options[selectedLevel.selectedIndex].innerHTML;
+            
+            if (selectedLevel.value == 0) {
+                alert('choose level');
+            }
+            else {
+                var dataString = 'wordId=' + wordId + '&DifficultyLevel=' + text;
+                $.ajax({
+                    type: 'POST',
+                    data: dataString,
+                    url: '/Home/ChangeDifficultyLevel',
+                    success: function (data) {
+                        alert(data.word);
+                    }
+                });
+            }
+        }
+
+    </script>
+}
